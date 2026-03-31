@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Future: Global Warming & Energy</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --metallic-silver: #e2e8f0;
+            --metallic-dark: #334155;
+            --accent-glow: #00f3ff;
+            --text-color: #ffffff;
+            --card-bg: #141414;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- HEADER & ANIMASI ANGGOTA --- */
+        header {
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.05);
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .member {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--metallic-silver);
+            background: linear-gradient(145deg, #222, #111);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid #444;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: bounceIn 1s ease both;
+        }
+
+        .member::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .member:hover::before {
+            left: 100%;
+        }
+
+        .member:hover {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-3px);
+            color: #fff;
+        }
+
+        /* Animasi masuk berurutan */
+        .member:nth-child(1) { animation-delay: 0.2s; }
+        .member:nth-child(2) { animation-delay: 0.4s; }
+        .member:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- MAIN CONTENT --- */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            border-color: #555;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .card h3 {
+            color: var(--metallic-silver);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--accent-glow);
+            padding-left: 10px;
+        }
+
+        .card p {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        /* --- SIMULASI --- */
+        .sim-box {
+            background: linear-gradient(145deg, #111, #1a1a1a);
+            border-radius: 16px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .sim-display {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .metric {
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            min-width: 150px;
+        }
+
+        .metric span {
+            display: block;
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .metric .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-glow);
+            margin-top: 5px;
+        }
+
+        .slider-control {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: #333;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--metallic-silver);
+            box-shadow: 0 0 10px var(--accent-glow);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* --- LEADERBOARD & KUIS --- */
+        .leaderboard-section {
+            background: #141414;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid #222;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .leaderboard-table th {
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .leaderboard-table tr:hover {
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        .rank {
+            font-weight: bold;
+            color: var(--accent-glow);
+        }
+
+        .quiz-btn {
+            background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 25px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #555;
+            font-size: 0.85rem;
+            border-top: 1px solid #111;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <span style="color: #64748b; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">Created By Team</span>
+        <div class="team-container">
+            <div class="member">1. Calvin</div>
+            <div class="member">2. Pryma Dapa</div>
+            <div class="member">3. Safaras Akma</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="section-title">Pemanasan Global & Energi</h1>
+        
+        <div class="grid-cards">
+            <div class="card">
+                <h3>Apa Masalahnya?</h3>
+                <p>Pemanasan global terjadi saat gas rumah kaca (seperti CO2) menumpuk di atmosfer dan memerangkap panas matahari. Hal ini menyebabkan suhu bumi terus naik secara ekstrem.</p>
+            </div>
+            <div class="card">
+                <h3>Apa Solusinya?</h3>
+                <p>Menghentikan penggunaan bahan bakar fosil dan beralih total ke <b>Energi Terbarukan</b> seperti panel surya, kincir angin, dan hidro yang ramah lingkungan dan tidak menghasilkan emisi.</p>
+            </div>
+        </div>
+
+        <h1 class="section-title">Simulasi Energi Hijau</h1>
+        <div class="sim-box">
+            <div class="sim-display">
+                <div class="metric">
+                    <span>Penggunaan Energi Bersih</span>
+                    <div class="value" id="energy-val">50%</div>
+                </div>
+                <div class="metric">
+                    <span>Suhu Global (Kenaikan)</span>
+                    <div class="value" id="temp-val">+2.5°C</div>
+                </div>
+                <div class="metric">
+                    <span>Kondisi Bumi</span>
+                    <div class="value" id="status-val" style="color: #ff9900;">Kritis</div>
+                </div>
+            </div>
+            
+            <div class="slider-control">
+                <input type="range" min="0" max="100" value="50" class="slider" id="energySlider">
+                <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">Geser slider untuk melihat efek transisi energi ke Bumi.</p>
+            </div>
+        </div>
+
+        <div class="leaderboard-section">
+            <h2 style="text-align: center; margin-bottom: 20px;">🏆 Papan Peringkat Kuis</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Peringkat</th>
+                        <th>Nama</th>
+                        <th>Skor</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <tr>
+                        <td class="rank">#1</td>
+                        <td>Andi</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">#2</td>
+                        <td>Siti</td>
+                        <td>90</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">#3</td>
+                        <td>Budi</td>
+                        <td>85</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button class="quiz-btn" onclick="takeQuiz()">Ikuti Kuis & Catat Skor</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Projek Pemanasan Global. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <script>
+        // Data Simulasi
+        const slider = document.getElementById("energySlider");
+        const energyVal = document.getElementById("energy-val");
+        const tempVal = document.getElementById("temp-val");
+        const statusVal = document.getElementById("status-val");
+
+        slider.oninput = function() {
+            let value = this.value;
+            energyVal.innerHTML = value + "%";
+            
+            // Hitung perkiraan suhu
+            let temp = (4.0 - (value * 0.035)).toFixed(1);
+            tempVal.innerHTML = "+" + temp + "°C";
+
+            // Logika Status
+            if(value < 40) {
+                statusVal.innerHTML = "Berbahaya";
+                statusVal.style.color = "#ff4444";
+                tempVal.style.color = "#ff4444";
+            } else if(value >= 40 && value < 80) {
+                statusVal.innerHTML = "Kritis";
+                statusVal.style.color = "#ff9900";
+                tempVal.style.color = "#ff9900";
+            } else {
+                statusVal.innerHTML = "Aman";
+                statusVal.style.color = "#00ff88";
+                tempVal.style.color = "#00ff88";
+            }
+        }
+
+        // Dummy Leaderboard System
+        let leaderboardData = [
+            { name: "Andi", score: 100 },
+            { name: "Siti", score: 90 },
+            { name: "Budi", score: 85 }
+        ];
+
+        function renderLeaderboard() {
+            const tbody = document.getElementById("leaderboard-body");
+            tbody.innerHTML = "";
+            
+            // Urutkan dari yang terbesar
+            leaderboardData.sort((a, b) => b.score - a.score);
+
+            leaderboardData.forEach((player, index) => {
+                const row = `
+                    <tr>
+                        <td class="rank">#${index + 1}</td>
+                        <td>${player.name}</td>
+                        <td>${player.score}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function takeQuiz() {
+            const name = prompt("Masukkan nama kamu:");
+            if (name) {
+                // Simulasi skor acak 50 - 100
+                const score = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+                alert(`Selamat ${name}, kamu menyelesaikan kuis dengan skor: ${score}!`);
+                
+                leaderboardData.push({ name: name, score: score });
+                renderLeaderboard();
+            }
+        }
+    </script>
+</body>
+</html>
