@@ -329,35 +329,13 @@
         </div>
 
         <div class="leaderboard-section">
-            <h2 style="text-align: center; margin-bottom: 20px;">🏆 Papan Peringkat Kuis</h2>
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Peringkat</th>
-                        <th>Nama</th>
-                        <th>Skor</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body">
-                    <tr>
-                        <td class="rank">#1</td>
-                        <td>Andi</td>
-                        <td>100</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">#2</td>
-                        <td>Siti</td>
-                        <td>90</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">#3</td>
-                        <td>Budi</td>
-                        <td>85</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2 style="text-align: center; margin-bottom: 20px;">📝 Kuis Pemanasan Global</h2>
             
-            <button class="quiz-btn" onclick="takeQuiz()">Ikuti Kuis & Catat Skor</button>
+            <div style="text-align: center;">
+                <p id="question-text" style="font-size: 1.2rem; margin-bottom: 15px; color: var(--metallic-silver);">Tekan tombol di bawah untuk memulai kuis.</p>
+                <div id="options-container" style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;"></div>
+                <button id="main-quiz-btn" class="quiz-btn" onclick="startQuiz()">Mulai Kuis</button>
+            </div>
         </div>
     </div>
 
@@ -396,42 +374,68 @@
             }
         }
 
-        // Dummy Leaderboard System
-        let leaderboardData = [
-            { name: "Andi", score: 100 },
-            { name: "Siti", score: 90 },
-            { name: "Budi", score: 85 }
+        // --- SISTEM KUIS 10 SOAL (MENGGANTIKAN LEADERBOARD) ---
+        const quizQuestions = [
+            { q: "Gas rumah kaca apa yang paling banyak dihasilkan dari pembakaran bahan bakar fosil?", a: ["Karbon Dioksida (CO2)", "Oksigen", "Helium", "Nitrogen"], c: 0 },
+            { q: "Manakah yang merupakan sumber energi terbarukan?", a: ["Batubara", "Minyak Bumi", "Energi Surya", "Gas Alam"], c: 2 },
+            { q: "Apa dampak langsung dari pemanasan global?", a: ["Penurunan permukaan laut", "Mencairnya es kutub", "Bumi semakin dingin", "Berkurangnya badai"], c: 1 },
+            { q: "Kepanjangan dari PLTS adalah...", a: ["Pembangkit Listrik Tenaga Surya", "Pembangkit Listrik Tenaga Sampah", "Pusat Listrik Tenaga Sinar", "Pembangkit Listrik Tenaga Siklon"], c: 0 },
+            { q: "Negara mana penyumbang emisi CO2 terbesar di dunia?", a: ["Indonesia", "Tiongkok", "Jepang", "Kanada"], c: 1 },
+            { q: "Energi hidro memanfaatkan tenaga apa?", a: ["Angin", "Panas Bumi", "Air", "Matahari"], c: 2 },
+            { q: "Efek rumah kaca yang berlebihan menyebabkan...", a: ["Suhu bumi stabil", "Suhu bumi meningkat", "Suhu bumi menurun", "Oksigen bertambah"], c: 1 },
+            { q: "Perjanjian internasional di Paris menetapkan batas kenaikan suhu bumi sebesar...", a: ["1.5°C", "5.0°C", "10.0°C", "0.5°C"], c: 0 },
+            { q: "Manakah tindakan yang dapat mengurangi emisi karbon?", a: ["Menggunakan mobil pribadi", "Menebang hutan", "Menggunakan transportasi umum", "Membakar sampah"], c: 2 },
+            { q: "Kincir angin mengubah energi angin menjadi energi...", a: ["Kimia", "Listrik", "Nuklir", "Otot"], c: 1 }
         ];
 
-        function renderLeaderboard() {
-            const tbody = document.getElementById("leaderboard-body");
-            tbody.innerHTML = "";
-            
-            // Urutkan dari yang terbesar
-            leaderboardData.sort((a, b) => b.score - a.score);
+        let currentQuestion = 0;
+        let score = 0;
 
-            leaderboardData.forEach((player, index) => {
-                const row = `
-                    <tr>
-                        <td class="rank">#${index + 1}</td>
-                        <td>${player.name}</td>
-                        <td>${player.score}</td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
+        function startQuiz() {
+            document.getElementById("main-quiz-btn").style.display = "none";
+            showQuestion();
         }
 
-        function takeQuiz() {
-            const name = prompt("Masukkan nama kamu:");
-            if (name) {
-                // Simulasi skor acak 50 - 100
-                const score = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
-                alert(`Selamat ${name}, kamu menyelesaikan kuis dengan skor: ${score}!`);
+        function showQuestion() {
+            const questionText = document.getElementById("question-text");
+            const optionsContainer = document.getElementById("options-container");
+            
+            optionsContainer.innerHTML = "";
+            
+            if (currentQuestion < quizQuestions.length) {
+                const qData = quizQuestions[currentQuestion];
+                questionText.innerHTML = `Soal ${currentQuestion + 1}/10: ${qData.q}`;
                 
-                leaderboardData.push({ name: name, score: score });
-                renderLeaderboard();
+                qData.a.forEach((option, index) => {
+                    const btn = document.createElement("button");
+                    btn.className = "quiz-btn";
+                    btn.style.margin = "5px auto";
+                    btn.style.width = "100%";
+                    btn.innerHTML = option;
+                    btn.onclick = () => checkAnswer(index);
+                    optionsContainer.appendChild(btn);
+                });
+            } else {
+                questionText.innerHTML = `Kuis Selesai!`;
+                optionsContainer.innerHTML = `<h3 style="color: var(--accent-glow); font-size: 2rem;">Skor Akhir Anda: ${score * 10}</h3>`;
+                const restartBtn = document.createElement("button");
+                restartBtn.className = "quiz-btn";
+                restartBtn.innerHTML = "Ulangi Kuis";
+                restartBtn.onclick = () => {
+                    currentQuestion = 0;
+                    score = 0;
+                    showQuestion();
+                };
+                optionsContainer.appendChild(restartBtn);
             }
+        }
+
+        function checkAnswer(index) {
+            if (index === quizQuestions[currentQuestion].c) {
+                score++;
+            }
+            currentQuestion++;
+            showQuestion();
         }
     </script>
 </body>
